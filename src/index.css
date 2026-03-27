@@ -1,0 +1,358 @@
+/* 全局样式 */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  line-height: 1.6;
+  color: #333;
+  background-color: #f5f5f5;
+}
+
+.app {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+/* 推广页面样式 */
+.promotion-page {
+  background-color: white;
+  border-radius: 12px;
+  padding: 40px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  max-width: 600px;
+  width: 100%;
+  text-align: center;
+}
+
+.promotion-page h1 {
+  font-size: 28px;
+  color: #333;
+  margin-bottom: 15px;
+}
+
+.subtitle {
+  font-size: 16px;
+  color: #666;
+  margin-bottom: 30px;
+  line-height: 1.5;
+}
+
+/* 语言选择器样式 */
+.language-selector {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 30px;
+  flex-wrap: wrap;
+}
+
+.lang-btn {
+  padding: 8px 16px;
+  border: 1px solid #e0e0e0;
+  background-color: white;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.3s ease;
+}
+
+.lang-btn:hover {
+  background-color: #f5f5f5;
+  border-color: #0078d4;
+}
+
+.lang-btn.active {
+  background-color: #0078d4;
+  color: white;
+  border-color: #0078d4;
+}
+
+/* 表单样式 */
+.promotion-form {
+  background-color: #f9f9f9;
+  padding: 30px;
+  border-radius: 8px;
+  margin-bottom: 30px;
+  text-align: left;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 8px;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 12px 15px;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  font-size: 14px;
+  transition: border-color 0.3s ease;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: #0078d4;
+  box-shadow: 0 0 0 2px rgba(0, 120, 212, 0.1);
+}
+
+.promotion-btn {
+  display: block;
+  width: 100%;
+  padding: 14px;
+  background-color: #0078d4;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-top: 20px;
+}
+
+.promotion-btn:hover {
+  background-color: #005a9e;
+}
+
+.promotion-btn:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+/* 状态消息 */
+.status-message {
+  padding: 15px;
+  border-radius: 4px;
+  margin-bottom: 30px;
+  font-size: 14px;
+  font-weight: 600;
+  text-align: center;
+}
+
+.status-message.success {
+  background-color: #e8f5e8;
+  color: #2e7d32;
+  border: 1px solid #c8e6c9;
+}
+
+.status-message.error {
+  background-color: #ffebee;
+  color: #c62828;
+  border: 1px solid #ffcdd2;
+}
+
+/* 推广信息 */
+.promotion-info {
+  background-color: #f5f5f5;
+  padding: 25px;
+  border-radius: 8px;
+  text-align: left;
+}
+
+.promotion-info h2 {
+  font-size: 18px;
+  color: #333;
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+.promotion-info ul {
+  list-style: none;
+  padding: 0;
+  margin-bottom: 30px;
+}
+
+.promotion-info li {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 10px;
+  padding-left: 20px;
+  position: relative;
+}
+
+.promotion-info li:before {
+  content: '✓';
+  position: absolute;
+  left: 0;
+  color: #0078d4;
+  font-weight: 700;
+}
+
+/* 推广效果表格 */
+.promotion-results {
+  margin-top: 30px;
+  padding-top: 20px;
+  border-top: 1px solid #e0e0e0;
+}
+
+.promotion-results h3 {
+  font-size: 16px;
+  color: #333;
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+.results-table {
+  overflow-x: auto;
+}
+
+.results-table table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.results-table th,
+.results-table td {
+  padding: 12px 15px;
+  text-align: left;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.results-table th {
+  background-color: #0078d4;
+  color: white;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.results-table tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.results-table tr:hover {
+  background-color: #f5f5f5;
+}
+
+.results-table td {
+  font-size: 14px;
+  color: #333;
+}
+
+/* 子域名表头样式 */
+.subdomain-header {
+  background-color: #f0f7ff;
+  font-weight: 600;
+  text-align: center !important;
+  font-size: 14px;
+  color: #0078d4;
+  border-top: 2px solid #0078d4;
+  border-bottom: 2px solid #0078d4;
+}
+
+/* 无数据提示样式 */
+.no-data {
+  text-align: center !important;
+  padding: 40px !important;
+  color: #666;
+  font-style: italic;
+  background-color: #f9f9f9;
+}
+
+/* RTL 支持 */
+.promotion-page.rtl .results-table th,
+.promotion-page.rtl .results-table td {
+  text-align: right;
+}
+
+.promotion-page.rtl .subdomain-header {
+  text-align: center !important;
+}
+
+
+/* 加载样式 */
+.loading {
+  text-align: center;
+  padding: 50px;
+  font-size: 18px;
+  color: #666;
+}
+
+/* RTL (从右到左) 支持 - 阿拉伯语 */
+.promotion-page.rtl {
+  direction: rtl;
+  text-align: right;
+}
+
+.promotion-page.rtl .promotion-form {
+  text-align: right;
+}
+
+.promotion-page.rtl .promotion-info {
+  text-align: right;
+}
+
+.promotion-page.rtl .promotion-info li {
+  padding-left: 0;
+  padding-right: 20px;
+}
+
+.promotion-page.rtl .promotion-info li:before {
+  left: auto;
+  right: 0;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .promotion-page {
+    padding: 25px;
+  }
+
+  .promotion-form {
+    padding: 20px;
+  }
+
+  .promotion-page h1 {
+    font-size: 24px;
+  }
+
+  .language-selector {
+    gap: 8px;
+  }
+
+  .lang-btn {
+    padding: 6px 12px;
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 480px) {
+  .app {
+    padding: 10px;
+  }
+
+  .promotion-page {
+    padding: 20px;
+  }
+
+  .promotion-form {
+    padding: 15px;
+  }
+
+  .language-selector {
+    flex-wrap: wrap;
+  }
+
+  .lang-btn {
+    flex: 1;
+    min-width: 80px;
+  }
+}
