@@ -61,6 +61,18 @@ function generatePromotionRecords(url: string, hostname: string, subdomains: str
   return records
 }
 
+// ─── 安全工具函数 ─────────────────────────────────────────────
+// URL 协议白名单：仅允许 http/https，防止 javascript:/data: 注入
+const ALLOWED_PROTOCOLS = new Set(['http:', 'https:'])
+function isSafeUrl(raw: string): boolean {
+  try { return ALLOWED_PROTOCOLS.has(new URL(raw).protocol) } catch { return false }
+}
+// HTML 属性转义：防止 title/alt 等属性中的 XSS
+function sanitizeForAttr(v: string): string {
+  return v.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/'/g, '&#39;')
+          .replace(/</g, '&lt;').replace(/>/g, '&gt;')
+}
+
 const LANGUAGES: Language[] = ['zh', 'en', 'fr', 'ja', 'de', 'ar']
 
 const LANGUAGE_NAMES: Record<Language, string> = {
@@ -105,6 +117,13 @@ const Promotion: React.FC = () => {
 
       if (!url.trim()) {
         setStatus(t.emptyUrlMessage)
+        setPromotionSuccess(false)
+        return
+      }
+
+      // 协议白名单校验：仅允许 http/https
+      if (!isSafeUrl(url.trim())) {
+        setStatus(t.errorMessage)
         setPromotionSuccess(false)
         return
       }
@@ -322,7 +341,7 @@ const Promotion: React.FC = () => {
                               key={`main-${index}`}
                               className={index % 2 === 0 ? 'bg-green-50' : ''}
                             >
-                              <td className="px-4 py-2 max-w-xs truncate" title={record.url}>
+                              <td className="px-4 py-2 max-w-xs truncate" title={sanitizeForAttr(record.url)}>
                                 {record.url}
                               </td>
                               <td className="px-4 py-2">{record.hostname}</td>
@@ -346,7 +365,7 @@ const Promotion: React.FC = () => {
                               key={`sub-${index}`}
                               className={index % 2 === 0 ? 'bg-blue-50' : ''}
                             >
-                              <td className="px-4 py-2 max-w-xs truncate" title={record.url}>
+                              <td className="px-4 py-2 max-w-xs truncate" title={sanitizeForAttr(record.url)}>
                                 {record.url}
                               </td>
                               <td className="px-4 py-2">{record.hostname}</td>
@@ -364,7 +383,7 @@ const Promotion: React.FC = () => {
                           key={`record-${index}`}
                           className={index % 2 === 0 ? 'bg-green-50' : ''}
                         >
-                          <td className="px-4 py-2 max-w-xs truncate" title={record.url}>
+                          <td className="px-4 py-2 max-w-xs truncate" title={sanitizeForAttr(record.url)}>
                             {record.url}
                           </td>
                           <td className="px-4 py-2">{record.hostname}</td>
