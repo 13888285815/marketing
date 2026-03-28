@@ -30,8 +30,8 @@ export const translations: Record<Language, Translations> = {
       '自动提交到各大搜索引擎',
       '分享到社交媒体平台',
       '生成推广链接',
-      '监控推广效果'
-    ]
+      '监控推广效果',
+    ],
   },
   en: {
     title: 'Auto Promotion Tool',
@@ -48,8 +48,8 @@ export const translations: Record<Language, Translations> = {
       'Auto-submit to major search engines',
       'Share to social media platforms',
       'Generate promotion links',
-      'Monitor promotion effectiveness'
-    ]
+      'Monitor promotion effectiveness',
+    ],
   },
   ja: {
     title: '自動プロモーションツール',
@@ -66,8 +66,8 @@ export const translations: Record<Language, Translations> = {
       '主要な検索エンジンに自動送信',
       'ソーシャルメディアプラットフォームで共有',
       'プロモーションリンクの生成',
-      'プロモーション効果の監視'
-    ]
+      'プロモーション効果の監視',
+    ],
   },
   de: {
     title: 'Automatisches Promotion-Tool',
@@ -84,8 +84,8 @@ export const translations: Record<Language, Translations> = {
       'Automatische Einreichung bei großen Suchmaschinen',
       'Auf Social-Media-Plattformen teilen',
       'Werbelinks generieren',
-      'Werbeeffektivität überwachen'
-    ]
+      'Werbeeffektivität überwachen',
+    ],
   },
   ar: {
     title: 'أداة الترويج التلقائي',
@@ -102,14 +102,14 @@ export const translations: Record<Language, Translations> = {
       'الإرسال التلقائي إلى محركات البحث الرئيسية',
       'المشاركة على منصات التواصل الاجتماعي',
       'إنشاء روابط ترويجية',
-      'مراقبة فعالية الترويج'
-    ]
+      'مراقبة فعالية الترويج',
+    ],
   },
   fr: {
     title: 'Outil de promotion automatique',
-    subtitle: 'Entrez votre URL et nous vous aiderons à la promouvoir à tous les utilisateurs sur Internet.',
+    subtitle: "Entrez votre URL et nous vous aiderons à la promouvoir à tous les utilisateurs sur Internet.",
     urlLabel: 'URL:',
-    urlPlaceholder: 'Entrez lURL complète, par exemple : https://example.com',
+    urlPlaceholder: "Entrez l'URL complète, par exemple : https://example.com",
     submitButton: 'Démarrer la promotion',
     submittingButton: 'Promotion en cours...',
     successMessage: 'Promotion réussie ! Votre URL a été mise en ligne sur Internet.',
@@ -120,78 +120,50 @@ export const translations: Record<Language, Translations> = {
       'Soumission automatique aux principaux moteurs de recherche',
       'Partage sur les plateformes de réseaux sociaux',
       'Génération de liens de promotion',
-      'Surveillance de lefficacité de la promotion'
-    ]
-  }
+      "Surveillance de l'efficacité de la promotion",
+    ],
+  },
 };
 
-// 根据国家代码映射到语言
+/**
+ * 国家代码 → 语言映射
+ * 未列出的国家默认返回英语
+ */
 export const countryToLanguage: Record<string, Language> = {
   // 中文地区
-  CN: 'zh', // 中国
-  TW: 'zh', // 台湾
-  HK: 'zh', // 香港
-  MO: 'zh', // 澳门
-  SG: 'zh', // 新加坡
-  
-  // 日语地区
-  JP: 'ja', // 日本
-  
-  // 德语地区
-  DE: 'de', // 德国
-  AT: 'de', // 奥地利
-  CH: 'de', // 瑞士（德语区）
-  
-  // 法语地区
-  FR: 'fr', // 法国
-  BE: 'fr', // 比利时
-  LU: 'fr', // 卢森堡
-  
-  // 阿拉伯语地区
-  SA: 'ar', // 沙特阿拉伯
-  AE: 'ar', // 阿联酋
-  EG: 'ar', // 埃及
-  IQ: 'ar', // 伊拉克
-  JO: 'ar', // 约旦
-  KW: 'ar', // 科威特
-  LB: 'ar', // 黎巴嫩
-  LY: 'ar', // 利比亚
-  MA: 'ar', // 摩洛哥
-  OM: 'ar', // 阿曼
-  QA: 'ar', // 卡塔尔
-  SY: 'ar', // 叙利亚
-  TN: 'ar', // 突尼斯
-  YE: 'ar', // 也门
-  BH: 'ar', // 巴林
-  DZ: 'ar', // 阿尔及利亚
-  SD: 'ar', // 苏丹
-  PS: 'ar', // 巴勒斯坦
-  
-  // 默认为英语
-  US: 'en',
-  GB: 'en',
-  CA: 'en',
-  AU: 'en',
-  NZ: 'en',
-  IE: 'en',
-  ZA: 'en',
-  IN: 'en'
+  CN: 'zh', TW: 'zh', HK: 'zh', MO: 'zh', SG: 'zh',
+  // 日语
+  JP: 'ja',
+  // 德语
+  DE: 'de', AT: 'de', CH: 'de',
+  // 法语
+  FR: 'fr', BE: 'fr', LU: 'fr',
+  // 阿拉伯语
+  SA: 'ar', AE: 'ar', EG: 'ar', IQ: 'ar', JO: 'ar',
+  KW: 'ar', LB: 'ar', LY: 'ar', MA: 'ar', OM: 'ar',
+  QA: 'ar', SY: 'ar', TN: 'ar', YE: 'ar', BH: 'ar',
+  DZ: 'ar', SD: 'ar', PS: 'ar',
+  // 英语
+  US: 'en', GB: 'en', CA: 'en', AU: 'en',
+  NZ: 'en', IE: 'en', ZA: 'en', IN: 'en',
 };
 
 export const getLanguageByCountry = (countryCode: string): Language => {
-  return countryToLanguage[countryCode.toUpperCase()] || 'en';
+  return countryToLanguage[countryCode.toUpperCase()] ?? 'en';
 };
 
+/**
+ * 检测用户语言（优先使用浏览器语言，无需外部 API）
+ * 保持 async 签名以保持与调用方的兼容性
+ */
 export const detectLanguage = async (): Promise<Language> => {
   try {
-    // 快速回退到浏览器语言，避免依赖外部API
     const browserLang = navigator.language.split('-')[0];
     if (['zh', 'en', 'fr', 'ja', 'de', 'ar'].includes(browserLang)) {
       return browserLang as Language;
     }
     return 'en';
-  } catch (error) {
-    console.error('Failed to detect language:', error);
+  } catch {
     return 'en';
   }
 };
