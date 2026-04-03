@@ -1,5 +1,4 @@
-import { useState, useEffect, useCallback } from 'react'
-import { Language, Translations, translations, detectLanguage } from '../utils/i18n'
+import { useState, useCallback } from 'react'
 
 // 推广域名统计数据结构
 interface DomainStat {
@@ -61,69 +60,56 @@ function generatePromotionRecords(url: string, hostname: string, subdomains: str
   return records
 }
 
-// ─── 安全工具函数 ─────────────────────────────────────────────
-// URL 协议白名单：仅允许 http/https，防止 javascript:/data: 注入
+// 安全工具函数
 const ALLOWED_PROTOCOLS = new Set(['http:', 'https:'])
 function isSafeUrl(raw: string): boolean {
   try { return ALLOWED_PROTOCOLS.has(new URL(raw).protocol) } catch { return false }
 }
-// HTML 属性转义：防止 title/alt 等属性中的 XSS
 function sanitizeForAttr(v: string): string {
   return v.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/'/g, '&#39;')
           .replace(/</g, '&lt;').replace(/>/g, '&gt;')
 }
 
-const LANGUAGES: Language[] = ['zh', 'en', 'fr', 'ja', 'de', 'ar']
-
-const LANGUAGE_NAMES: Record<Language, string> = {
-  zh: '中文',
-  en: 'English',
-  fr: 'Français',
-  ja: '日本語',
-  de: 'Deutsch',
-  ar: 'العربية',
+// 中文文案
+const TEXT = {
+  title: '智能域名推广系统',
+  subtitle: '一键提交域名到各大搜索引擎和社交媒体平台',
+  urlLabel: '请输入要推广的域名',
+  urlPlaceholder: '例如: https://yndxw.com',
+  submitButton: '开始推广',
+  submittingButton: '推广中...',
+  emptyUrlMessage: '请输入要推广的域名',
+  errorMessage: '请输入有效的URL地址（以http://或https://开头）',
+  successMessage: '域名推广成功！',
+  infoTitle: '推广说明',
+  infoItems: [
+    '自动提交到百度、微信、微博、抖音等国内主流平台',
+    '同步推送到Google、Facebook等国际平台',
+    '支持子域名批量推广（如 yndxw.com 系列）',
+    '实时生成推广效果报告和数据分析',
+  ],
 }
 
 const Promotion: React.FC = () => {
   const [url, setUrl] = useState('')
   const [status, setStatus] = useState('')
   const [isPromoting, setIsPromoting] = useState(false)
-  const [currentLang, setCurrentLang] = useState<Language>('zh')
-  const [isLoading, setIsLoading] = useState(true)
   const [promotionSuccess, setPromotionSuccess] = useState(false)
-
-  // 稳定的统计数据，避免随机数在每次 render 时变化
   const [domainStats, setDomainStats] = useState<DomainStat[]>([])
   const [promotionRecords, setPromotionRecords] = useState<PromotionRecord[]>([])
-
-  const t: Translations = translations[currentLang]
-
-  useEffect(() => {
-    const initLanguage = async () => {
-      const detectedLang = await detectLanguage()
-      setCurrentLang(detectedLang)
-      setIsLoading(false)
-    }
-    initLanguage()
-  }, [])
-
-  const handleLanguageChange = useCallback((lang: Language) => {
-    setCurrentLang(lang)
-  }, [])
 
   const handlePromotion = useCallback(
     async (e: React.FormEvent) => {
       e.preventDefault()
 
       if (!url.trim()) {
-        setStatus(t.emptyUrlMessage)
+        setStatus(TEXT.emptyUrlMessage)
         setPromotionSuccess(false)
         return
       }
 
-      // 协议白名单校验：仅允许 http/https
       if (!isSafeUrl(url.trim())) {
-        setStatus(t.errorMessage)
+        setStatus(TEXT.errorMessage)
         setPromotionSuccess(false)
         return
       }
@@ -132,13 +118,13 @@ const Promotion: React.FC = () => {
       try {
         parsedUrl = new URL(url)
       } catch {
-        setStatus(t.errorMessage)
+        setStatus(TEXT.errorMessage)
         setPromotionSuccess(false)
         return
       }
 
       setIsPromoting(true)
-      setStatus(t.submittingButton)
+      setStatus(TEXT.submittingButton)
       setPromotionSuccess(false)
       setDomainStats([])
       setPromotionRecords([])
@@ -154,10 +140,8 @@ const Promotion: React.FC = () => {
           newSubdomains = subdomainPrefixes.map((prefix) => `${protocol}//${prefix}.${baseDomain}`)
         }
 
-        // 模拟推广延迟
         await new Promise<void>((resolve) => setTimeout(resolve, 2000))
 
-        // 生成稳定的统计数据（使用时间戳作为种子，确保每次推广结果一致）
         const seed = Date.now()
         const allHostnames = [domain, ...newSubdomains.map((s) => new URL(s).hostname)]
         const stats = allHostnames.map((hostname, i) =>
@@ -167,55 +151,26 @@ const Promotion: React.FC = () => {
 
         setDomainStats(stats)
         setPromotionRecords(records)
-        setStatus(t.successMessage)
+        setStatus(TEXT.successMessage)
         setPromotionSuccess(true)
       } catch {
-        setStatus(t.errorMessage)
+        setStatus(TEXT.errorMessage)
         setPromotionSuccess(false)
       } finally {
         setIsPromoting(false)
       }
     },
-    [url, t]
+    [url]
   )
 
-  if (isLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-xl text-gray-500">Loading...</div>
-      </div>
-    )
-  }
-
-  const isRTL = currentLang === 'ar'
-
   return (
-    <div className={`min-h-screen bg-gray-50 ${isRTL ? 'rtl' : 'ltr'}`}>
+    <div className="min-h-screen bg-gray-50">
       <div className="container mx-auto px-4 py-8">
-        {/* 语言选择器 */}
-        <div className="flex justify-end mb-6">
-          <div className="flex flex-wrap gap-2">
-            {LANGUAGES.map((lang) => (
-              <button
-                key={lang}
-                onClick={() => handleLanguageChange(lang)}
-                className={`px-3 py-1 rounded text-sm transition-colors ${
-                  currentLang === lang
-                    ? 'bg-blue-500 text-white'
-                    : 'bg-white text-gray-700 border border-gray-300 hover:border-blue-400'
-                }`}
-              >
-                {LANGUAGE_NAMES[lang]}
-              </button>
-            ))}
-          </div>
-        </div>
-
         <div className="max-w-4xl mx-auto">
           {/* 标题区域 */}
           <div className="text-center mb-8">
-            <h1 className="text-4xl font-bold text-gray-900 mb-4">{t.title}</h1>
-            <p className="text-lg text-gray-600">{t.subtitle}</p>
+            <h1 className="text-4xl font-bold text-gray-900 mb-4">{TEXT.title}</h1>
+            <p className="text-lg text-gray-600">{TEXT.subtitle}</p>
           </div>
 
           {/* 推广表单 */}
@@ -223,14 +178,14 @@ const Promotion: React.FC = () => {
             <form onSubmit={handlePromotion} className="space-y-4">
               <div>
                 <label htmlFor="url" className="block text-sm font-medium text-gray-700 mb-2">
-                  {t.urlLabel}
+                  {TEXT.urlLabel}
                 </label>
                 <input
                   type="url"
                   id="url"
                   value={url}
                   onChange={(e) => setUrl(e.target.value)}
-                  placeholder={t.urlPlaceholder}
+                  placeholder={TEXT.urlPlaceholder}
                   className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                   required
                 />
@@ -241,7 +196,7 @@ const Promotion: React.FC = () => {
                 disabled={isPromoting}
                 className="w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
               >
-                {isPromoting ? t.submittingButton : t.submitButton}
+                {isPromoting ? TEXT.submittingButton : TEXT.submitButton}
               </button>
             </form>
 
@@ -260,9 +215,9 @@ const Promotion: React.FC = () => {
 
           {/* 推广原理说明 */}
           <div className="bg-white rounded-lg shadow-lg p-6 mb-8">
-            <h2 className="text-xl font-bold text-gray-900 mb-4">{t.infoTitle}</h2>
+            <h2 className="text-xl font-bold text-gray-900 mb-4">{TEXT.infoTitle}</h2>
             <ul className="space-y-2 text-gray-600">
-              {t.infoItems.map((item, index) => (
+              {TEXT.infoItems.map((item, index) => (
                 <li key={index} className="flex items-start gap-2">
                   <span className="text-blue-500 font-bold mt-0.5">✓</span>
                   <span>{item}</span>
@@ -271,7 +226,7 @@ const Promotion: React.FC = () => {
             </ul>
           </div>
 
-          {/* 推广域名统计表格（推广成功后展示） */}
+          {/* 推广域名统计表格 */}
           {domainStats.length > 0 && (
             <div className="bg-white rounded-lg shadow-lg p-6 mb-8">
               <h2 className="text-xl font-bold text-gray-900 mb-4">推广域名详细数据</h2>
@@ -331,7 +286,6 @@ const Promotion: React.FC = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {/* 子域名分组标题 */}
                     {promotionRecords.some((r) => r.isSubdomain) && (
                       <>
                         {promotionRecords
@@ -376,7 +330,6 @@ const Promotion: React.FC = () => {
                           ))}
                       </>
                     )}
-                    {/* 无子域名时直接渲染 */}
                     {!promotionRecords.some((r) => r.isSubdomain) &&
                       promotionRecords.map((record, index) => (
                         <tr
